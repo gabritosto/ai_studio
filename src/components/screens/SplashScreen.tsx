@@ -34,7 +34,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
   return (
     <div
       onClick={onComplete}
-      className="relative w-full h-full min-h-[640px] bg-[#503789] flex flex-col items-center justify-between p-8 text-white select-none cursor-pointer overflow-hidden transition-all duration-500"
+      className="relative w-full h-full bg-[#503789] flex flex-col items-center justify-between pt-10 pb-8 px-6 text-white select-none cursor-pointer overflow-hidden transition-all duration-500"
     >
       {/* Subtle night sparkles in background */}
       <div className="absolute inset-0 pointer-events-none opacity-40">

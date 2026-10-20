@@ -24,16 +24,7 @@ function AppContent() {
   const [selectedDreamId, setSelectedDreamId] = useState<string>('dream-2026-01-09');
   const [selectedDate, setSelectedDate] = useState<string>('2026-01-09');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isMobileFrame, setIsMobileFrame] = useState(true);
   const [isDreamModalOpen, setIsDreamModalOpen] = useState(false);
-
-  // Screen steps definition matching user's numbered screenshots
-  const steps: { id: ScreenStep; label: string; number: number }[] = [
-    { id: 'caricamento', label: '1. Caricamento', number: 1 },
-    { id: 'home', label: '2. Home', number: 2 },
-    { id: 'calendario', label: '3. Calendario', number: 3 },
-    { id: 'scheda_sogno', label: '4. Scheda Sogno', number: 4 },
-  ];
 
   const handleOpenDream = (dreamId: string) => {
     setSelectedDreamId(dreamId);
@@ -45,179 +36,134 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#e4e1d8] flex flex-col items-center justify-start text-[#47387e] font-sans antialiased selection:bg-[#f6be4f]/40 relative">
-      {/* Interactive Top Step Controller - Strict adherence to screenshot order */}
-      <header className="w-full max-w-4xl px-4 pt-3 pb-2 flex flex-wrap items-center justify-between gap-3 text-xs z-30">
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#f6be4f] animate-pulse" />
-          <span className="font-bold tracking-tight text-[#47387e]">Sogni Prototype</span>
-          <span className="text-[11px] text-[#6e5ba8] hidden sm:inline">
-            (Segui i 4 screenshot in sequenza)
-          </span>
+    <div className="min-h-screen w-full bg-[#181424] flex items-center justify-center p-0 sm:p-4 select-none overflow-hidden">
+      {/* iPhone 13 mini Chassis (Exact dimensions: 375pt x 812pt) */}
+      <div className="w-full max-w-[375px] h-[100dvh] sm:h-[812px] sm:max-h-[812px] bg-[#edebe5] text-[#47387e] sm:rounded-[48px] sm:border-[10px] sm:border-[#2b253b] sm:shadow-[0_25px_70px_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,255,255,0.08)] relative overflow-hidden flex flex-col justify-between">
+        
+        {/* iPhone 13 mini Compact Notch */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[140px] h-[25px] bg-[#2b253b] rounded-b-[18px] z-50 flex items-center justify-center pointer-events-none">
+          {/* Speaker grill */}
+          <div className="w-10 h-1 bg-[#161220] rounded-full mr-2" />
+          {/* Front camera lens */}
+          <div className="w-2.5 h-2.5 rounded-full bg-[#161220] border border-[#3e3553]/60 flex items-center justify-center">
+            <div className="w-1 h-1 rounded-full bg-[#3b4c74]/80" />
+          </div>
         </div>
 
-        {/* Step Buttons 1, 2, 3, 4 */}
-        <div className="flex items-center gap-1.5 bg-white/70 p-1 rounded-full border border-[#b8abec]/70 shadow-xs">
-          {steps.map((s) => {
-            const isActive =
-              s.id === 'scheda_sogno'
-                ? isDreamModalOpen
-                : currentScreen === s.id && !isDreamModalOpen;
-
-            return (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => {
-                  if (s.id === 'scheda_sogno') {
-                    setSelectedDreamId('dream-2026-01-09');
-                    setIsDreamModalOpen(true);
-                  } else {
-                    setIsDreamModalOpen(false);
-                    setCurrentScreen(s.id);
-                  }
-                }}
-                className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
-                  isActive
-                    ? 'bg-[#47387e] text-white shadow-xs'
-                    : 'text-[#6e5ba8] hover:text-[#47387e] hover:bg-white/60'
-                }`}
-              >
-                {s.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Mobile / Fullscreen layout toggle */}
-        <div className="flex items-center gap-1 bg-white/70 p-1 rounded-full border border-[#b8abec]/70">
-          <button
-            type="button"
-            onClick={() => setIsMobileFrame(true)}
-            title="Vista Cornice Smartphone"
-            className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-colors ${
-              isMobileFrame ? 'bg-[#dcd4fe] text-[#47387e] font-bold' : 'text-[#6e5ba8]'
-            }`}
-          >
-            📱 Mobile
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsMobileFrame(false)}
-            title="Vista Fluida Ampia"
-            className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-colors ${
-              !isMobileFrame ? 'bg-[#dcd4fe] text-[#47387e] font-bold' : 'text-[#6e5ba8]'
-            }`}
-          >
-            💻 Fluida
-          </button>
-        </div>
-      </header>
-
-      {/* Main App Container */}
-      <main className="w-full flex-1 flex items-center justify-center p-0 sm:p-4 mb-4">
-        <div
-          className={`relative transition-all duration-300 overflow-hidden flex flex-col justify-between ${
-            isMobileFrame
-              ? 'w-full max-w-[395px] h-[835px] max-h-[92vh] rounded-[44px] shadow-2xl border-[9px] border-[#31254f] bg-[#edebe5]'
-              : 'w-full max-w-2xl min-h-[750px] rounded-3xl shadow-lg border border-[#b8abec]/80 bg-[#edebe5]'
-          }`}
-        >
-          {/* Simulated Mobile Status Bar (when mobile frame is enabled and not in splash) */}
-          {isMobileFrame && currentScreen !== 'caricamento' && (
-            <div className="w-full px-7 pt-3 pb-1 flex items-center justify-between text-xs text-[#47387e] font-semibold select-none z-20 shrink-0">
-              <span>09:41</span>
-              {/* Dynamic Island / Speaker notch simulation */}
-              <div className="w-20 h-4 bg-[#31254f] rounded-full" />
-              <div className="flex items-center gap-1 text-[11px]">
-                <span>5G</span>
-                <span>100%</span>
+        {/* iPhone 13 mini Status Bar */}
+        {currentScreen !== 'caricamento' && (
+          <div className="w-full px-6 pt-2 pb-0.5 flex items-center justify-between text-xs text-[#47387e] font-semibold select-none z-40 shrink-0">
+            <span className="text-[12px] tracking-tight pl-0.5 font-bold">09:41</span>
+            
+            {/* Right status icons: Cellular, WiFi, Battery */}
+            <div className="flex items-center gap-1.5 text-[11px] pr-0.5">
+              {/* Cellular Signal */}
+              <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                <rect x="2" y="16" width="3" height="6" rx="0.5" />
+                <rect x="7" y="12" width="3" height="10" rx="0.5" />
+                <rect x="12" y="8" width="3" height="14" rx="0.5" />
+                <rect x="17" y="4" width="3" height="18" rx="0.5" />
+              </svg>
+              {/* WiFi */}
+              <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2.5" strokeLinecap="round" viewBox="0 0 24 24">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+                <path d="M1.42 9a16 16 0 0 1 21.16 0" />
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+                <circle cx="12" cy="20" r="1" className="fill-current" />
+              </svg>
+              {/* Battery */}
+              <div className="w-5 h-2.5 rounded-[3px] border border-current p-[1px] flex items-center">
+                <div className="h-full w-full bg-current rounded-[1px]" />
               </div>
             </div>
-          )}
-
-          {/* Render Active Screen */}
-          <div className="flex-1 flex flex-col overflow-hidden relative">
-            {currentScreen === 'caricamento' && (
-              <SplashScreen
-                onComplete={() => {
-                  setCurrentScreen('home');
-                }}
-              />
-            )}
-
-            {currentScreen === 'home' && (
-              <HomeScreen
-                onNavigate={(screen) => {
-                  setIsDreamModalOpen(false);
-                  setCurrentScreen(screen);
-                }}
-                onOpenDream={handleOpenDream}
-                onSelectDate={handleSelectDate}
-                selectedDate={selectedDate}
-              />
-            )}
-
-            {currentScreen === 'calendario' && (
-              <CalendarScreen
-                onNavigate={(screen) => {
-                  setIsDreamModalOpen(false);
-                  setCurrentScreen(screen);
-                }}
-                onOpenDream={handleOpenDream}
-                selectedDate={selectedDate}
-                onSelectDate={handleSelectDate}
-              />
-            )}
-
-            {currentScreen === 'scheda_sogno' && !isDreamModalOpen && (
-              <HomeScreen
-                onNavigate={setCurrentScreen}
-                onOpenDream={handleOpenDream}
-                onSelectDate={handleSelectDate}
-                selectedDate={selectedDate}
-              />
-            )}
-
-            {currentScreen === 'podcast' && <PodcastScreen />}
-
-            {currentScreen === 'profilo' && <ProfileScreen />}
-
           </div>
+        )}
 
-          {/* Bottom Navigation Bar: Hidden on splash AND hidden when Dream Modal is open */}
-          {currentScreen !== 'caricamento' && !isDreamModalOpen && (
-            <div className="sticky bottom-0 z-30 w-full bg-gradient-to-t from-[#edebe5] via-[#edebe5]/90 to-transparent pt-2">
-              <BottomNav
-                currentScreen={currentScreen}
-                onNavigate={(screen) => {
-                  setIsDreamModalOpen(false);
-                  setCurrentScreen(screen);
-                }}
-                onOpenSearch={() => setIsSearchOpen(true)}
-              />
-            </div>
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col overflow-hidden relative">
+          {currentScreen === 'caricamento' && (
+            <SplashScreen
+              onComplete={() => {
+                setCurrentScreen('home');
+              }}
+            />
           )}
 
-          {/* Scheda Sogno Modal: Strictly confined INSIDE the smartphone frame */}
-          <DreamCardScreen
-            isOpen={isDreamModalOpen}
-            dreamId={selectedDreamId}
-            onClose={() => setIsDreamModalOpen(false)}
-            onNavigate={(screen) => {
-              setIsDreamModalOpen(false);
-              setCurrentScreen(screen);
-            }}
-          />
+          {currentScreen === 'home' && (
+            <HomeScreen
+              onNavigate={(screen) => {
+                setIsDreamModalOpen(false);
+                setCurrentScreen(screen);
+              }}
+              onOpenDream={handleOpenDream}
+              onSelectDate={handleSelectDate}
+              selectedDate={selectedDate}
+            />
+          )}
 
-          {/* Global Search Dialog: Confined inside smartphone frame */}
-          <SearchModal
-            isOpen={isSearchOpen}
-            onClose={() => setIsSearchOpen(false)}
-            onSelectDream={handleOpenDream}
-          />
+          {currentScreen === 'calendario' && (
+            <CalendarScreen
+              onNavigate={(screen) => {
+                setIsDreamModalOpen(false);
+                setCurrentScreen(screen);
+              }}
+              onOpenDream={handleOpenDream}
+              selectedDate={selectedDate}
+              onSelectDate={handleSelectDate}
+            />
+          )}
+
+          {currentScreen === 'scheda_sogno' && !isDreamModalOpen && (
+            <HomeScreen
+              onNavigate={setCurrentScreen}
+              onOpenDream={handleOpenDream}
+              onSelectDate={handleSelectDate}
+              selectedDate={selectedDate}
+            />
+          )}
+
+          {currentScreen === 'podcast' && <PodcastScreen />}
+
+          {currentScreen === 'profilo' && <ProfileScreen onRestartSplash={() => setCurrentScreen('caricamento')} />}
         </div>
-      </main>
+
+        {/* Bottom Navigation Bar: Hidden on splash and hidden when Dream Modal is open */}
+        {currentScreen !== 'caricamento' && !isDreamModalOpen && (
+          <div className="sticky bottom-0 z-30 w-full bg-gradient-to-t from-[#edebe5] via-[#edebe5]/95 to-transparent pt-1">
+            <BottomNav
+              currentScreen={currentScreen}
+              onNavigate={(screen) => {
+                setIsDreamModalOpen(false);
+                setCurrentScreen(screen);
+              }}
+              onOpenSearch={() => setIsSearchOpen(true)}
+            />
+          </div>
+        )}
+
+        {/* iOS Home Indicator Bar */}
+        <div className="w-full pb-2 pt-1 flex items-center justify-center shrink-0 z-40 pointer-events-none">
+          <div className="w-32 h-1 bg-[#47387e]/25 rounded-full" />
+        </div>
+
+        {/* Scheda Sogno Modal: Strictly confined INSIDE the iPhone 13 mini frame */}
+        <DreamCardScreen
+          isOpen={isDreamModalOpen}
+          dreamId={selectedDreamId}
+          onClose={() => setIsDreamModalOpen(false)}
+          onNavigate={(screen) => {
+            setIsDreamModalOpen(false);
+            setCurrentScreen(screen);
+          }}
+        />
+
+        {/* Global Search Dialog: Confined inside iPhone 13 mini frame */}
+        <SearchModal
+          isOpen={isSearchOpen}
+          onClose={() => setIsSearchOpen(false)}
+          onSelectDream={handleOpenDream}
+        />
+      </div>
     </div>
   );
 }

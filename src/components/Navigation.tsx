@@ -13,11 +13,11 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   onOpenSearch,
 }) => {
   return (
-    <div className="w-full max-w-[430px] mx-auto px-4 pb-4 pt-2 flex items-center justify-between gap-3 pointer-events-auto">
+    <div className="w-full max-w-[375px] mx-auto px-3.5 pb-1 pt-1 flex items-center justify-between gap-2.5 pointer-events-auto">
       {/* Main Nav Capsule */}
       <nav
         aria-label="Navigazione principale"
-        className="flex-1 bg-[#dcd4fe] shadow-md shadow-[#47387e]/5 rounded-full px-4 py-2 flex items-center justify-around backdrop-blur-sm"
+        className="flex-1 bg-[#dcd4fe] shadow-md shadow-[#47387e]/5 rounded-full px-3 py-1.5 flex items-center justify-around backdrop-blur-sm"
       >
         {/* Home */}
         <button
@@ -138,7 +138,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         onClick={onOpenSearch}
         title="Cerca nei sogni"
         aria-label="Cerca nei sogni"
-        className="w-13 h-13 rounded-full bg-[#dcd4fe] text-[#47387e] flex items-center justify-center shadow-md shadow-[#47387e]/10 hover:bg-[#cfc3fd] active:scale-95 transition-transform shrink-0"
+        className="w-11 h-11 rounded-full bg-[#dcd4fe] text-[#47387e] flex items-center justify-center shadow-md shadow-[#47387e]/10 hover:bg-[#cfc3fd] active:scale-95 transition-transform shrink-0"
       >
         <svg
           viewBox="0 0 24 24"
@@ -147,7 +147,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="w-6 h-6"
+          className="w-5 h-5"
         >
           <circle cx="11" cy="11" r="7" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />

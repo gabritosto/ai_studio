@@ -38,17 +38,17 @@ export const CalendarScreen: React.FC<CalendarScreenProps> = ({
   }, [allDreams]);
 
   return (
-    <div className="w-full flex-1 flex flex-col px-5 pt-6 pb-24 overflow-y-auto no-scrollbar">
+    <div className="w-full flex-1 flex flex-col px-4 pt-3 pb-16 overflow-y-auto no-scrollbar">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-3xl font-medium tracking-tight text-[#47387e]">
+      <div className="flex items-center justify-between mb-3">
+        <h1 className="text-2xl font-medium tracking-tight text-[#47387e]">
           Calendario
         </h1>
         <button
           type="button"
           onClick={() => onNavigate('profilo')}
           aria-label="Apri profilo"
-          className="w-13 h-13 rounded-full overflow-hidden border-2 border-white/60 shadow-sm transition-transform active:scale-95"
+          className="w-11 h-11 rounded-full overflow-hidden border-2 border-white/60 shadow-xs transition-transform active:scale-95"
         >
           <img
             src={user?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'}
@@ -162,8 +162,8 @@ export const CalendarScreen: React.FC<CalendarScreenProps> = ({
       </div>
 
       {/* Cute Walking Star Mascot centered at bottom (Exact replica of Screen 3) */}
-      <div className="flex items-center justify-center mt-2 mb-2">
-        <StarMascot size={110} animate={true} />
+      <div className="flex items-center justify-center mt-1 mb-1">
+        <StarMascot size={96} animate={true} />
       </div>
     </div>
   );

@@ -124,7 +124,7 @@ export const DreamCardModal: React.FC<DreamCardModalProps> = ({
       {/* Dream Modal Card (Contained within smartphone frame) */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-[360px] bg-[#dcd4fe] rounded-[30px] p-4.5 shadow-2xl border border-[#cebffe] flex flex-col gap-3.5 relative animate-in zoom-in-95 duration-200 my-auto"
+        className="w-full max-w-[346px] bg-[#dcd4fe] rounded-[28px] p-4 shadow-2xl border border-[#cebffe] flex flex-col gap-3 relative animate-in zoom-in-95 duration-200 my-auto"
       >
         {/* Card Header: Title & Close Button */}
         <div className="flex items-center justify-between">

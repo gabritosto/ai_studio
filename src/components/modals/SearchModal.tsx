@@ -31,9 +31,9 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="search-modal-title"
-      className="absolute inset-0 z-50 bg-[#362569]/70 backdrop-blur-xs flex items-center justify-center p-3.5"
+      className="absolute inset-0 z-50 bg-[#362569]/70 backdrop-blur-xs flex items-center justify-center p-3"
     >
-      <div className="w-full max-w-[360px] bg-[#edebe5] rounded-[28px] p-5 shadow-2xl border border-white/60 flex flex-col max-h-[82vh]">
+      <div className="w-full max-w-[346px] bg-[#edebe5] rounded-[28px] p-4.5 shadow-2xl border border-white/60 flex flex-col max-h-[80vh]">
         {/* Modal Header */}
         <div className="flex items-center justify-between mb-4">
           <h2 id="search-modal-title" className="text-xl font-medium text-[#47387e]">
