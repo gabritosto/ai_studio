@@ -1,0 +1,6 @@
+{
+  "name": "Sogni - Diario dei Sogni",
+  "description": "Applicazione interattiva per la registrazione, il tracciamento e l'esplorazione dei tuoi sogni con calendario, libreria e audio diario.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
