@@ -9,13 +9,1147 @@
     <meta property="og:description" content="Applicazione interattiva per la registrazione, il tracciamento e l'esplorazione dei tuoi sogni con calendario, libreria e audio diario." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'brand-purple': '#47387e',
+              'brand-lavender': '#dcd4fe',
+              'brand-gold': '#f6be4f',
+              'brand-dark': '#2b253b',
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+      body {
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        background-color: #181424;
+        color: #47387e;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      @keyframes floatGentle {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-5px) rotate(1deg); }
+      }
+      @keyframes pulseGlow {
+        0%, 100% { opacity: 0.95; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.03); }
+      }
+      .animate-float-gentle {
+        animation: floatGentle 3.5s ease-in-out infinite;
+      }
+      .animate-pulse-glow {
+        animation: pulseGlow 2.5s ease-in-out infinite;
+      }
+    </style>
   </head>
-  <body class="bg-[#edeae3] text-[#3e2d6b] antialiased select-none selection:bg-[#fbbf24]/30">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+  <body class="min-h-screen w-full bg-[#181424] flex items-center justify-center p-0 sm:p-4 select-none overflow-hidden m-0">
+
+    <!-- iPhone 13 mini Chassis (Dimensioni reali logiche: 375pt x 812pt) -->
+    <div id="iphone-frame" class="w-full max-w-[375px] h-[100dvh] sm:h-[812px] sm:max-h-[812px] bg-[#edebe5] text-[#47387e] sm:rounded-[48px] sm:border-[10px] sm:border-[#2b253b] sm:shadow-[0_25px_70px_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,255,255,0.08)] relative overflow-hidden flex flex-col justify-between">
+
+      <!-- iPhone 13 mini Compact Notch -->
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[140px] h-[25px] bg-[#2b253b] rounded-b-[18px] z-50 flex items-center justify-center pointer-events-none">
+        <div class="w-10 h-1 bg-[#161220] rounded-full mr-2"></div>
+        <div class="w-2.5 h-2.5 rounded-full bg-[#161220] border border-[#3e3553]/60 flex items-center justify-center">
+          <div class="w-1 h-1 rounded-full bg-[#3b4c74]/80"></div>
+        </div>
+      </div>
+
+      <!-- iPhone 13 mini Status Bar -->
+      <div id="status-bar" class="w-full px-6 pt-2 pb-0.5 flex items-center justify-between text-xs text-[#47387e] font-semibold select-none z-40 shrink-0">
+        <span class="text-[12px] tracking-tight pl-0.5 font-bold">09:41</span>
+        <div class="flex items-center gap-1.5 text-[11px] pr-0.5">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+            <rect x="2" y="16" width="3" height="6" rx="0.5" />
+            <rect x="7" y="12" width="3" height="10" rx="0.5" />
+            <rect x="12" y="8" width="3" height="14" rx="0.5" />
+            <rect x="17" y="4" width="3" height="18" rx="0.5" />
+          </svg>
+          <svg class="w-3.5 h-3.5 fill-none stroke-current" stroke-width="2.5" stroke-linecap="round" viewBox="0 0 24 24">
+            <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+            <path d="M1.42 9a16 16 0 0 1 21.16 0" />
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+            <circle cx="12" cy="20" r="1" class="fill-current" />
+          </svg>
+          <div class="w-5 h-2.5 rounded-[3px] border border-current p-[1px] flex items-center">
+            <div class="h-full w-full bg-current rounded-[1px]"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Area Contenuto Schermata -->
+      <div id="screen-container" class="flex-1 flex flex-col overflow-hidden relative">
+        <!-- Renderizzato via JavaScript -->
+      </div>
+
+      <!-- Bottom Navigation Bar a Capsula -->
+      <div id="bottom-nav-container" class="sticky bottom-0 z-30 w-full bg-gradient-to-t from-[#edebe5] via-[#edebe5]/95 to-transparent pt-1">
+        <div class="w-full max-w-[375px] mx-auto px-3.5 pb-1 pt-1 flex items-center justify-between gap-2.5 pointer-events-auto">
+          <nav aria-label="Navigazione principale" class="flex-1 bg-[#dcd4fe] shadow-md shadow-[#47387e]/5 rounded-full px-3 py-1.5 flex items-center justify-around backdrop-blur-sm">
+            <!-- Home -->
+            <button type="button" onclick="App.navigate('home')" id="nav-btn-home" class="flex flex-col items-center justify-center transition-all group">
+              <div class="w-6 h-6 flex items-center justify-center">
+                <svg viewBox="0 0 24 24" class="w-5 h-5 nav-icon" fill="currentColor" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+              </div>
+              <span class="text-[10px] font-medium tracking-tight mt-0.5">Home</span>
+            </button>
+
+            <!-- Podcast -->
+            <button type="button" onclick="App.navigate('podcast')" id="nav-btn-podcast" class="flex flex-col items-center justify-center transition-all group opacity-80 text-[#5d4d91]">
+              <div class="w-6 h-6 flex items-center justify-center">
+                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+                  <line x1="4" y1="9" x2="4" y2="15" />
+                  <line x1="8" y1="6" x2="8" y2="18" />
+                  <line x1="12" y1="3" x2="12" y2="21" />
+                  <line x1="16" y1="7" x2="16" y2="17" />
+                  <line x1="20" y1="10" x2="20" y2="14" />
+                </svg>
+              </div>
+              <span class="text-[10px] font-medium tracking-tight mt-0.5">Podcast</span>
+            </button>
+
+            <!-- Profilo -->
+            <button type="button" onclick="App.navigate('profilo')" id="nav-btn-profilo" class="flex flex-col items-center justify-center transition-all group opacity-80 text-[#5d4d91]">
+              <div class="w-6 h-6 flex items-center justify-center">
+                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </div>
+              <span class="text-[10px] font-medium tracking-tight mt-0.5">Profilo</span>
+            </button>
+
+            <!-- Calendario -->
+            <button type="button" onclick="App.navigate('calendario')" id="nav-btn-calendario" class="flex flex-col items-center justify-center transition-all group opacity-80 text-[#5d4d91]">
+              <div class="w-6 h-6 flex items-center justify-center">
+                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="3" ry="3" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                  <polygon points="12 12.2 13 14.3 15.2 14.5 13.5 16 14 18.2 12 17 10 18.2 10.5 16 8.8 14.5 11 14.3" fill="currentColor" stroke="none" />
+                </svg>
+              </div>
+              <span class="text-[10px] font-medium tracking-tight mt-0.5">Calendario</span>
+            </button>
+          </nav>
+
+          <!-- Bottone Ricerca Fluttuante -->
+          <button type="button" onclick="App.openSearch()" title="Cerca nei sogni" aria-label="Cerca nei sogni" class="w-11 h-11 rounded-full bg-[#dcd4fe] text-[#47387e] flex items-center justify-center shadow-md shadow-[#47387e]/10 hover:bg-[#cfc3fd] active:scale-95 transition-transform shrink-0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- iOS Home Indicator -->
+      <div id="home-indicator" class="w-full pb-2 pt-1 flex items-center justify-center shrink-0 z-40 pointer-events-none">
+        <div class="w-32 h-1 bg-[#47387e]/25 rounded-full"></div>
+      </div>
+
+      <!-- Modale Scheda Sogno (Confinata rigorosamente all'interno del frame) -->
+      <div id="dream-modal-container" class="hidden absolute inset-0 z-50 bg-[#2f1f58]/75 backdrop-blur-xs flex items-center justify-center p-3 overflow-y-auto no-scrollbar" onclick="App.closeDreamModal(event)">
+        <!-- Contenuto iniettato dinamicamente -->
+      </div>
+
+      <!-- Modale Ricerca (Confinata all'interno del frame) -->
+      <div id="search-modal-container" class="hidden absolute inset-0 z-50 bg-[#362569]/70 backdrop-blur-xs flex items-center justify-center p-3" onclick="App.closeSearch(event)">
+        <!-- Contenuto iniettato dinamicamente -->
+      </div>
+
+      <!-- Toast Feedback -->
+      <div id="toast" class="hidden absolute top-8 left-1/2 -translate-x-1/2 z-60 bg-[#362569] text-white px-4 py-2 rounded-full shadow-xl text-xs font-semibold flex items-center gap-2">
+        <span class="text-[#f6be4f]">✦</span>
+        <span id="toast-text">Sogno salvato con successo!</span>
+      </div>
+    </div>
+
+    <!-- Script Applicativo Nativo Singolo Senza Dipendenze Esterne -->
+    <script>
+      // ==========================================
+      // ICONE SVG ED ASSET GRAFICI REPLICATI
+      // ==========================================
+      const SVGS = {
+        starMascot: (size = 110, animated = true) => `
+          <div class="relative inline-flex items-center justify-center select-none ${animated ? 'animate-float-gentle' : ''}" style="width: ${size}px; height: ${size * 1.35}px">
+            <svg viewBox="0 0 160 220" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-sm">
+              <rect x="52" y="135" width="22" height="72" rx="4" fill="#F6BE4F" />
+              <rect x="86" y="135" width="22" height="72" rx="4" fill="#F6BE4F" />
+              <path d="M80 8 L99 58 L152 64 L112 102 L124 154 L80 126 L36 154 L48 102 L8 64 L61 58 Z" fill="#F6BE4F" stroke="#F6BE4F" stroke-width="6" stroke-linejoin="round" />
+              <g stroke="#3E2D6B" stroke-width="2.8" stroke-linecap="round">
+                <path d="M58 84 Q66 78 74 84" />
+                <path d="M60 81 L57 77" stroke-width="2.2" />
+                <path d="M72 81 L75 77" stroke-width="2.2" />
+                <path d="M86 84 Q94 78 102 84" />
+                <path d="M88 81 L85 77" stroke-width="2.2" />
+                <path d="M100 81 L103 77" stroke-width="2.2" />
+              </g>
+              <path d="M74 97 Q80 102 86 97" stroke="#3E2D6B" stroke-width="2.8" stroke-linecap="round" fill="none" />
+              <circle cx="53" cy="94" r="4.5" fill="#ECA938" opacity="0.45" />
+              <circle cx="107" cy="94" r="4.5" fill="#ECA938" opacity="0.45" />
+            </svg>
+          </div>
+        `,
+        nightSky: (showMascot = true) => `
+          <div class="relative w-full aspect-[16/10] flex items-center justify-center overflow-hidden">
+            <svg viewBox="0 0 320 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full max-h-[145px]">
+              <path d="M60 48 L63 56 L71 59 L63 62 L60 70 L57 62 L49 59 L57 56 Z" fill="#F6BE4F" />
+              <path d="M236 46 L239 53 L246 56 L239 59 L236 66 L233 59 L226 56 L233 53 Z" fill="#F6BE4F" />
+              <path d="M198 160 L200 165 L205 167 L200 169 L198 174 L196 169 L191 167 L196 165 Z" fill="#F6BE4F" />
+              <path d="M88 126 C76 112 70 85 86 62 C98 44 116 38 128 37 C110 45 100 62 102 83 C104 104 120 120 142 124 C122 133 100 134 88 126 Z" fill="#F6BE4F" />
+              <path d="M48 140 C36 140 28 132 30 120 C32 110 40 102 52 102 C56 90 68 80 84 82 C94 72 112 68 128 76 C136 68 152 64 166 72 C176 68 190 70 198 80 C210 78 224 88 226 102 C238 106 248 116 244 130 C242 140 230 144 220 144 L54 144 Z" fill="#47387E" />
+              <path d="M34 140 C24 140 20 148 24 156 C28 164 38 168 52 168 L130 168 C136 168 142 162 136 156 C130 150 120 148 108 148 L60 148 Z" fill="#47387E" />
+              ${showMascot ? `
+                <g transform="translate(162, 106) scale(0.68)">
+                  <rect x="52" y="132" width="20" height="64" rx="4" fill="#F6BE4F" />
+                  <rect x="84" y="132" width="20" height="64" rx="4" fill="#F6BE4F" />
+                  <path d="M78 12 L96 60 L146 66 L108 102 L120 150 L78 124 L36 150 L48 102 L10 66 L60 60 Z" fill="#F6BE4F" stroke="#F6BE4F" stroke-width="5" stroke-linejoin="round" />
+                  <path d="M58 84 Q65 79 72 84" stroke="#3E2D6B" stroke-width="2.6" stroke-linecap="round" fill="none" />
+                  <path d="M84 84 Q91 79 98 84" stroke="#3E2D6B" stroke-width="2.6" stroke-linecap="round" fill="none" />
+                  <path d="M74 96 Q78 100 82 96" stroke="#3E2D6B" stroke-width="2.6" stroke-linecap="round" fill="none" />
+                </g>
+              ` : ''}
+            </svg>
+          </div>
+        `,
+        peperoncini: `
+          <svg width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 18 C14 26 12 36 22 46 C24 48 26 47 25 45 C18 36 21 28 26 22 Z" fill="#47387E" />
+            <circle cx="21" cy="18" r="2.2" fill="#F6BE4F" />
+            <path d="M25 48 C34 49 42 42 45 32 C45 30 43 31 41 33 C34 40 28 42 22 46 Z" fill="#47387E" />
+            <circle cx="22" cy="48" r="2.2" fill="#F6BE4F" />
+            <path d="M34 16 C42 18 46 28 41 38 C40 40 42 39 44 36 C48 26 44 18 36 15 Z" fill="#47387E" />
+            <circle cx="35" cy="16" r="2.2" fill="#F6BE4F" />
+          </svg>
+        `,
+        spirale: `
+          <svg width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 32 m -3, 0 a 3,3 0 0,1 6,0 a 6,6 0 0,1 -12,0 a 9,9 0 0,1 18,0 a 12,12 0 0,1 -24,0 a 15,15 0 0,1 30,0 a 18,18 0 0,1 -36,0" stroke="#47387E" stroke-width="3.2" stroke-linecap="round" fill="none" />
+            <circle cx="32" cy="32" r="3" fill="#F6BE4F" />
+          </svg>
+        `,
+        lucciole: `
+          <svg width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g fill="#47387E">
+              <ellipse cx="20" cy="22" rx="4" ry="2.2" transform="rotate(-15 20 22)" />
+              <ellipse cx="32" cy="18" rx="4.5" ry="2.4" transform="rotate(5 32 18)" />
+              <ellipse cx="44" cy="23" rx="4" ry="2.2" transform="rotate(25 44 23)" />
+              <ellipse cx="16" cy="32" rx="4.2" ry="2.2" transform="rotate(-30 16 32)" />
+              <ellipse cx="28" cy="29" rx="4.5" ry="2.4" transform="rotate(-5 28 29)" />
+              <ellipse cx="38" cy="28" rx="4.5" ry="2.4" transform="rotate(15 38 28)" />
+              <ellipse cx="48" cy="33" rx="4.2" ry="2.2" transform="rotate(20 48 33)" />
+              <ellipse cx="22" cy="40" rx="4.5" ry="2.4" transform="rotate(-20 22 40)" />
+              <ellipse cx="33" cy="38" rx="4.8" ry="2.5" />
+              <ellipse cx="43" cy="42" rx="4.5" ry="2.4" transform="rotate(25 43 42)" />
+            </g>
+            <g fill="#F6BE4F">
+              <circle cx="23" cy="21" r="1.3" />
+              <circle cx="36" cy="18" r="1.3" />
+              <circle cx="47" cy="24" r="1.3" />
+              <circle cx="19" cy="30" r="1.3" />
+              <circle cx="32" cy="28" r="1.3" />
+              <circle cx="42" cy="29" r="1.3" />
+              <circle cx="51" cy="34" r="1.3" />
+              <circle cx="26" cy="39" r="1.3" />
+              <circle cx="37" cy="38" r="1.3" />
+              <circle cx="46" cy="43" r="1.3" />
+            </g>
+          </svg>
+        `
+      };
+
+      // ==========================================
+      // STATO GLOBALE DELL'APPLICAZIONE (Nativo)
+      // ==========================================
+      const App = {
+        state: {
+          currentScreen: 'caricamento', // 1. caricamento, 2. home, 3. calendario, 4. scheda_sogno (modale)
+          selectedDate: '2026-01-09',
+          selectedDreamId: 'dream-2026-01-09',
+          isDreamModalOpen: false,
+          isSearchOpen: false,
+          isRecording: false,
+          recordingSeconds: 0,
+          isPlayingAudio: false,
+          audioProgress: 0,
+          recordingInterval: null,
+          playingInterval: null,
+          user: {
+            name: 'Federica',
+            avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
+            streakDays: 7,
+            totalDreams: 24,
+            lucidDreams: 9,
+            favoriteQuote: 'I sogni sono la porta segreta dell’anima.'
+          },
+          dreams: [
+            {
+              id: 'dream-2026-01-09',
+              title: 'Volando tra le stelle',
+              date: '2026-01-09',
+              dayNumber: 9,
+              description: 'Fluttuavo leggera tra morbide nuvole color viola, accarezzata dalla luce calda della luna crescente. Una piccola stella dorata camminava al mio fianco.',
+              categoryIds: ['cat-peperoncini', 'cat-spirale'],
+              isFavorite: true,
+              lucid: true
+            },
+            {
+              id: 'dream-2026-01-08',
+              title: 'Nel Giardino dei Sussurri',
+              date: '2026-01-08',
+              dayNumber: 8,
+              description: 'Fiori fosforescenti sussurravano vecchie melodie dimenticate sotto una pioggia di polvere dorata.',
+              categoryIds: ['cat-lucciole'],
+              isFavorite: true,
+              lucid: false
+            },
+            {
+              id: 'dream-2026-01-07',
+              title: 'La Città d’Acqua e Specchi',
+              date: '2026-01-07',
+              dayNumber: 7,
+              description: 'Strade fatte di canali d’argento e ponti di cristallo che riflettevano costellazioni in movimento.',
+              categoryIds: ['cat-spirale'],
+              isFavorite: false,
+              lucid: true
+            },
+            {
+              id: 'dream-2026-01-11',
+              title: 'Il Labirinto di Velluto',
+              date: '2026-01-11',
+              dayNumber: 11,
+              description: 'Un labirinto con pareti morbide color indaco, in cui ogni svolta rivelava ricordi felici d’infanzia.',
+              categoryIds: ['cat-peperoncini', 'cat-spirale'],
+              isFavorite: true,
+              lucid: true
+            }
+          ]
+        },
+
+        init() {
+          // Carica dati da localStorage se presenti
+          try {
+            const stored = localStorage.getItem('sogni_app_static_v1');
+            if (stored) {
+              const parsed = JSON.parse(stored);
+              if (parsed.dreams) this.state.dreams = parsed.dreams;
+            }
+          } catch(e) {}
+
+          this.render();
+
+          // Se siamo in caricamento, avvia progress bar automatica
+          if (this.state.currentScreen === 'caricamento') {
+            this.startSplashProgress();
+          }
+        },
+
+        persist() {
+          try {
+            localStorage.setItem('sogni_app_static_v1', JSON.stringify({
+              dreams: this.state.dreams
+            }));
+          } catch(e) {}
+        },
+
+        // Navigazione
+        navigate(screen) {
+          this.state.isDreamModalOpen = false;
+          this.state.isSearchOpen = false;
+          this.state.currentScreen = screen;
+          this.render();
+
+          if (screen === 'caricamento') {
+            this.startSplashProgress();
+          }
+        },
+
+        startSplashProgress() {
+          const bar = document.getElementById('splash-progress-bar');
+          const txt = document.getElementById('splash-progress-text');
+          if (!bar) return;
+          let p = 0;
+          const timer = setInterval(() => {
+            p += 5;
+            if (bar) bar.style.width = p + '%';
+            if (txt) txt.textContent = Math.min(100, p) + '%';
+            if (p >= 100) {
+              clearInterval(timer);
+              setTimeout(() => {
+                if (App.state.currentScreen === 'caricamento') {
+                  App.navigate('home');
+                }
+              }, 300);
+            }
+          }, 40);
+        },
+
+        // Apertura e gestione Modale Sogno
+        openDream(dreamId) {
+          this.state.selectedDreamId = dreamId;
+          this.state.isDreamModalOpen = true;
+          this.state.isRecording = false;
+          this.state.isPlayingAudio = false;
+          clearInterval(this.state.recordingInterval);
+          clearInterval(this.state.playingInterval);
+          this.renderModal();
+        },
+
+        closeDreamModal(e) {
+          if (e && e.target && e.target.id !== 'dream-modal-container' && e.target.closest('#dream-modal-box')) {
+            return;
+          }
+          this.state.isDreamModalOpen = false;
+          clearInterval(this.state.recordingInterval);
+          clearInterval(this.state.playingInterval);
+          const modal = document.getElementById('dream-modal-container');
+          if (modal) modal.classList.add('hidden');
+          // Mostra di nuovo bottom nav
+          document.getElementById('bottom-nav-container').classList.remove('hidden');
+        },
+
+        // Toggle Categoria nella modale
+        toggleCategory(catId) {
+          const dream = this.getCurrentDream();
+          if (!dream) return;
+          if (!dream.categoryIds) dream.categoryIds = [];
+          if (dream.categoryIds.includes(catId)) {
+            dream.categoryIds = dream.categoryIds.filter(id => id !== catId);
+          } else {
+            dream.categoryIds.push(catId);
+          }
+          this.persist();
+          this.renderModal();
+        },
+
+        // Toggle Preferiti
+        toggleFavorite(dreamId) {
+          const dream = this.state.dreams.find(d => d.id === dreamId);
+          if (dream) {
+            dream.isFavorite = !dream.isFavorite;
+            this.persist();
+            this.renderModal();
+            this.render();
+          }
+        },
+
+        // Registrazione Audio Vocale
+        toggleRecording() {
+          if (!this.state.isRecording) {
+            this.state.isRecording = true;
+            this.state.recordingSeconds = 0;
+            this.state.recordingInterval = setInterval(() => {
+              App.state.recordingSeconds++;
+              const el = document.getElementById('audio-timer-text');
+              const bar = document.getElementById('audio-progress-bar');
+              if (el) el.textContent = '00:' + String(App.state.recordingSeconds).padStart(2, '0');
+              if (bar) bar.style.width = Math.min(100, (App.state.recordingSeconds / 30) * 100) + '%';
+            }, 1000);
+          } else {
+            this.state.isRecording = false;
+            clearInterval(this.state.recordingInterval);
+          }
+          this.renderModal();
+        },
+
+        // Riproduzione Audio
+        toggleAudioPlay() {
+          if (!this.state.isPlayingAudio) {
+            this.state.isPlayingAudio = true;
+            this.state.audioProgress = 0;
+            this.state.playingInterval = setInterval(() => {
+              App.state.audioProgress += 5;
+              const bar = document.getElementById('audio-progress-bar');
+              if (bar) bar.style.width = App.state.audioProgress + '%';
+              if (App.state.audioProgress >= 100) {
+                App.state.isPlayingAudio = false;
+                clearInterval(App.state.playingInterval);
+                App.renderModal();
+              }
+            }, 150);
+          } else {
+            this.state.isPlayingAudio = false;
+            clearInterval(this.state.playingInterval);
+          }
+          this.renderModal();
+        },
+
+        // Salvataggio Sogno (Posta)
+        saveDream() {
+          const dream = this.getCurrentDream();
+          const titleInput = document.getElementById('dream-title-input');
+          const noteInput = document.getElementById('dream-note-input');
+
+          if (titleInput && titleInput.value.trim()) {
+            dream.title = titleInput.value.trim();
+          }
+          if (noteInput && noteInput.value.trim()) {
+            dream.description = noteInput.value.trim();
+          }
+
+          this.persist();
+          this.showToast('Sogno salvato con successo!');
+          this.render();
+          this.renderModal();
+        },
+
+        showToast(msg) {
+          const t = document.getElementById('toast');
+          const txt = document.getElementById('toast-text');
+          if (!t) return;
+          if (txt) txt.textContent = msg;
+          t.classList.remove('hidden');
+          setTimeout(() => t.classList.add('hidden'), 2500);
+        },
+
+        getCurrentDream() {
+          let dream = this.state.dreams.find(d => d.id === this.state.selectedDreamId);
+          if (!dream) {
+            dream = {
+              id: this.state.selectedDreamId,
+              title: 'Volando tra le stelle',
+              date: this.state.selectedDate,
+              dayNumber: parseInt(this.state.selectedDate.split('-')[2] || '9', 10),
+              description: 'Fluttuavo leggera tra morbide nuvole color viola...',
+              categoryIds: ['cat-peperoncini', 'cat-spirale'],
+              isFavorite: true
+            };
+            this.state.dreams.push(dream);
+          }
+          return dream;
+        },
+
+        selectDate(dateStr) {
+          this.state.selectedDate = dateStr;
+          const dream = this.state.dreams.find(d => d.date === dateStr);
+          if (dream) {
+            this.state.selectedDreamId = dream.id;
+          } else {
+            this.state.selectedDreamId = `dream-${dateStr}`;
+          }
+          this.render();
+        },
+
+        // Ricerca
+        openSearch() {
+          this.state.isSearchOpen = true;
+          const modal = document.getElementById('search-modal-container');
+          if (modal) {
+            modal.classList.remove('hidden');
+            this.renderSearchModal('');
+          }
+        },
+
+        closeSearch(e) {
+          if (e && e.target && e.target.id !== 'search-modal-container' && e.target.closest('#search-modal-box')) {
+            return;
+          }
+          this.state.isSearchOpen = false;
+          const modal = document.getElementById('search-modal-container');
+          if (modal) modal.classList.add('hidden');
+        },
+
+        // ==========================================
+        // RENDER DELL'INTERFACCIA
+        // ==========================================
+        render() {
+          const container = document.getElementById('screen-container');
+          const navContainer = document.getElementById('bottom-nav-container');
+          const statusBar = document.getElementById('status-bar');
+
+          // Gestione visibilità Nav e Status Bar
+          if (this.state.currentScreen === 'caricamento') {
+            navContainer.classList.add('hidden');
+            statusBar.classList.add('hidden');
+          } else {
+            navContainer.classList.remove('hidden');
+            statusBar.classList.remove('hidden');
+          }
+
+          // Aggiorna stato attivo nei bottoni della BottomNav
+          ['home', 'podcast', 'profilo', 'calendario'].forEach(screen => {
+            const btn = document.getElementById(`nav-btn-${screen}`);
+            if (btn) {
+              if (this.state.currentScreen === screen) {
+                btn.className = 'flex flex-col items-center justify-center transition-all group text-[#362569] scale-105 font-bold';
+              } else {
+                btn.className = 'flex flex-col items-center justify-center transition-all group opacity-80 text-[#5d4d91] hover:text-[#362569]';
+              }
+            }
+          });
+
+          // Renderizza schermata attiva
+          if (this.state.currentScreen === 'caricamento') {
+            container.innerHTML = this.templateCaricamento();
+          } else if (this.state.currentScreen === 'home') {
+            container.innerHTML = this.templateHome();
+          } else if (this.state.currentScreen === 'calendario') {
+            container.innerHTML = this.templateCalendario();
+          } else if (this.state.currentScreen === 'podcast') {
+            container.innerHTML = this.templatePodcast();
+          } else if (this.state.currentScreen === 'profilo') {
+            container.innerHTML = this.templateProfilo();
+          }
+        },
+
+        // Schermata 1: Caricamento
+        templateCaricamento() {
+          return `
+            <div onclick="App.navigate('home')" class="relative w-full h-full bg-[#503789] flex flex-col items-center justify-between pt-10 pb-8 px-6 text-white select-none cursor-pointer overflow-hidden transition-all duration-500">
+              <div class="absolute inset-0 pointer-events-none opacity-40">
+                <div class="absolute top-[18%] left-[22%] w-1.5 h-1.5 bg-[#ffd147] rounded-full animate-ping"></div>
+                <div class="absolute top-[28%] right-[18%] w-2 h-2 bg-[#ffd147] rounded-full animate-pulse"></div>
+                <div class="absolute bottom-[24%] left-[16%] w-1.5 h-1.5 bg-[#ffd147] rounded-full opacity-60"></div>
+                <div class="absolute bottom-[35%] right-[25%] w-2 h-2 bg-[#ffd147] rounded-full animate-ping"></div>
+              </div>
+
+              <div class="w-full flex justify-end items-center pt-2">
+                <button type="button" onclick="event.stopPropagation(); App.navigate('home')" class="text-xs text-white/60 hover:text-white/90 bg-white/10 hover:bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full transition-colors font-medium tracking-wide">
+                  Salta &rarr;
+                </button>
+              </div>
+
+              <div class="flex flex-col items-center justify-center my-auto">
+                <div class="relative">
+                  <div class="absolute -inset-6 rounded-full bg-[#f6be4f]/20 blur-xl animate-pulse-glow"></div>
+                  ${SVGS.starMascot(125, true)}
+                </div>
+              </div>
+
+              <div class="w-full max-w-[240px] flex flex-col items-center gap-2.5 pb-4">
+                <div class="w-full bg-white/15 h-1.5 rounded-full overflow-hidden backdrop-blur-sm">
+                  <div id="splash-progress-bar" class="bg-[#f6be4f] h-full rounded-full transition-all duration-100 ease-out" style="width: 0%"></div>
+                </div>
+                <p class="text-xs text-white/70 font-medium tracking-wide flex items-center gap-1.5">
+                  <span>Risveglio dei ricordi...</span>
+                  <span id="splash-progress-text" class="text-[#f6be4f] font-semibold">0%</span>
+                </p>
+                <span class="text-[10px] text-white/40 tracking-wider">Tocca per iniziare</span>
+              </div>
+            </div>
+          `;
+        },
+
+        // Schermata 2: Home
+        templateHome() {
+          const weekDays = [
+            { label: 'Lun', day: 7, date: '2026-01-07' },
+            { label: 'Mar', day: 8, date: '2026-01-08' },
+            { label: 'Mer', day: 9, date: '2026-01-09' },
+            { label: 'Gio', day: 10, date: '2026-01-10' },
+            { label: 'Ven', day: 11, date: '2026-01-11' },
+            { label: 'Sab', day: 12, date: '2026-01-12' },
+            { label: 'Dom', day: 13, date: '2026-01-13' }
+          ];
+
+          const todayDream = this.state.dreams.find(d => d.date === '2026-01-09') || this.state.dreams[0];
+
+          return `
+            <div class="w-full flex-1 flex flex-col px-4 pt-3 pb-16 overflow-y-auto no-scrollbar">
+              <!-- Top Header: Greeting & Profile Photo -->
+              <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl font-medium tracking-tight text-[#47387e]">
+                  Ciao, ${this.state.user.name}
+                </h1>
+                <button type="button" onclick="App.navigate('profilo')" aria-label="Apri profilo" class="w-11 h-11 rounded-full overflow-hidden border-2 border-white/60 shadow-xs transition-transform active:scale-95">
+                  <img src="${this.state.user.avatarUrl}" alt="${this.state.user.name}" class="w-full h-full object-cover" />
+                </button>
+              </div>
+
+              <!-- Sezione 1: Calendario Settimanale -->
+              <div class="mb-5">
+                <div class="flex items-center justify-between mb-2 px-0.5">
+                  <h2 class="text-lg font-medium text-[#47387e]">Calendario</h2>
+                  <button type="button" onclick="App.navigate('calendario')" class="text-sm font-normal text-[#5a4696] hover:text-[#3e2d6b] transition-colors">
+                    Altro
+                  </button>
+                </div>
+
+                <div class="flex items-center justify-between gap-1 text-center">
+                  ${weekDays.map(item => {
+                    const isSelected = item.day === 9;
+                    return `
+                      <button type="button" onclick="App.selectDate('${item.date}'); App.navigate('calendario');" class="flex flex-col items-center gap-2 flex-1 group transition-transform active:scale-95">
+                        <span class="text-xs font-normal text-[#66549c] group-hover:text-[#47387e]">${item.label}</span>
+                        <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium transition-all ${
+                          isSelected ? 'bg-[#f6be4f] text-[#362569] font-bold shadow-sm scale-105' : 'bg-[#dcd4fe] text-[#47387e] hover:bg-[#d0c6fd]'
+                        }">
+                          ${item.day}
+                        </div>
+                      </button>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+
+              <!-- Sezione 2: Il tuo sogno di oggi (Card a larghezza piena senza 'ci vediamo domani') -->
+              <div class="mb-5">
+                <div class="flex items-center justify-between mb-2 px-0.5">
+                  <h2 class="text-lg font-medium text-[#47387e]">Il tuo sogno di oggi</h2>
+                  <button type="button" onclick="App.openDream('${todayDream.id}')" class="text-sm font-normal text-[#5a4696] hover:text-[#3e2d6b] transition-colors">
+                    Altro
+                  </button>
+                </div>
+
+                <div onclick="App.openDream('${todayDream.id}')" role="button" tabindex="0" class="w-full bg-[#fbf9fe] border-2 border-[#b8abec] rounded-[26px] p-4 cursor-pointer hover:shadow-md transition-all group active:scale-[0.99] relative overflow-hidden">
+                  <h3 class="text-lg font-medium text-[#47387e] mb-1 px-1 tracking-tight">
+                    ${todayDream.title}
+                  </h3>
+                  <div class="w-full rounded-2xl bg-transparent flex items-center justify-center">
+                    ${SVGS.nightSky(true)}
+                  </div>
+                  <div class="mt-1 flex items-center justify-between text-xs text-[#6e5ba8] px-1 font-medium">
+                    <span>9 Gennaio</span>
+                    <span class="flex items-center gap-1 group-hover:translate-x-0.5 transition-transform text-[#47387e]">
+                      Tocca per aprire &rarr;
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sezione 3: La tua Libreria -->
+              <div class="mb-2">
+                <div class="flex items-center justify-between mb-2 px-0.5">
+                  <h2 class="text-lg font-medium text-[#47387e]">La tua Libreria</h2>
+                  <button type="button" onclick="App.navigate('podcast')" class="text-sm font-normal text-[#5a4696] hover:text-[#3e2d6b] transition-colors">
+                    Altro
+                  </button>
+                </div>
+
+                <div class="flex gap-2.5 overflow-x-auto no-scrollbar pb-1">
+                  <!-- Preferiti -->
+                  <button type="button" onclick="App.navigate('calendario')" class="w-32 h-32 bg-[#47387e] text-white rounded-[22px] p-3.5 flex flex-col justify-between hover:bg-[#3c2f6d] transition-all text-left group shrink-0 active:scale-95 shadow-xs">
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-sm font-semibold tracking-tight">Preferiti</span>
+                      <span class="text-[#f6be4f] text-base">★</span>
+                    </div>
+                    <div class="flex justify-end">
+                      <span class="text-white/80 group-hover:translate-x-1 transition-transform text-base">&gt;</span>
+                    </div>
+                  </button>
+
+                  <!-- Playlist -->
+                  <button type="button" onclick="App.navigate('podcast')" class="w-32 h-32 bg-[#47387e] text-white rounded-[22px] p-3.5 flex flex-col justify-between hover:bg-[#3c2f6d] transition-all text-left group shrink-0 active:scale-95 shadow-xs">
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-sm font-semibold tracking-tight">Playlist</span>
+                      <div class="w-4 h-4 rounded bg-[#f6be4f] text-[#47387e] flex items-center justify-center text-[9px] font-bold">≡</div>
+                    </div>
+                    <div class="flex justify-end">
+                      <span class="text-white/80 group-hover:translate-x-1 transition-transform text-base">&gt;</span>
+                    </div>
+                  </button>
+
+                  <!-- Lucidi -->
+                  <button type="button" onclick="App.openDream('dream-2026-01-09')" class="w-32 h-32 bg-[#47387e] text-white rounded-[22px] p-3.5 flex flex-col justify-between hover:bg-[#3c2f6d] transition-all text-left group shrink-0 active:scale-95 shadow-xs">
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-sm font-semibold tracking-tight">Lucidi</span>
+                      <span class="text-[#f6be4f] text-sm">✦</span>
+                    </div>
+                    <div class="flex justify-end">
+                      <span class="text-white/80 group-hover:translate-x-1 transition-transform text-base">&gt;</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        },
+
+        // Schermata 3: Calendario
+        templateCalendario() {
+          const selectedDayNumber = parseInt(this.state.selectedDate.split('-')[2] || '9', 10);
+          const activeDream = this.state.dreams.find(d => d.date === this.state.selectedDate);
+
+          const days = [];
+          for (let i = 1; i <= 31; i++) {
+            days.push(i);
+          }
+
+          return `
+            <div class="w-full flex-1 flex flex-col px-4 pt-3 pb-16 overflow-y-auto no-scrollbar">
+              <!-- Header -->
+              <div class="flex items-center justify-between mb-2">
+                <h1 class="text-2xl font-medium tracking-tight text-[#47387e]">
+                  Calendario
+                </h1>
+                <button type="button" onclick="App.navigate('profilo')" aria-label="Apri profilo" class="w-11 h-11 rounded-full overflow-hidden border-2 border-white/60 shadow-xs transition-transform active:scale-95">
+                  <img src="${this.state.user.avatarUrl}" alt="${this.state.user.name}" class="w-full h-full object-cover" />
+                </button>
+              </div>
+
+              <!-- Selettore Mese -->
+              <div class="flex items-center justify-center gap-5 mb-2 text-[#47387e]">
+                <button type="button" class="p-1 hover:text-[#362569] font-bold text-lg">&lsaquo;</button>
+                <span class="text-lg font-medium tracking-wide">Gennaio</span>
+                <button type="button" class="p-1 hover:text-[#362569] font-bold text-lg">&rsaquo;</button>
+              </div>
+
+              <!-- Giorni della settimana -->
+              <div class="grid grid-cols-7 gap-1 text-center mb-1.5">
+                ${['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'].map(d => `
+                  <span class="text-xs font-normal text-[#66549c] py-0.5">${d}</span>
+                `).join('')}
+              </div>
+
+              <!-- Griglia Giorni 1-31 -->
+              <div class="grid grid-cols-7 gap-y-1.5 gap-x-1 text-center mb-4">
+                <div class="w-9 h-9 mx-auto"></div>
+                ${days.map(day => {
+                  const isSelected = selectedDayNumber === day;
+                  const formattedDate = `2026-01-${String(day).padStart(2, '0')}`;
+                  const hasDream = this.state.dreams.some(d => d.dayNumber === day);
+                  return `
+                    <button type="button" onclick="App.selectDate('${formattedDate}')" class="group relative flex items-center justify-center p-0.5 active:scale-90 transition-transform">
+                      <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium transition-all ${
+                        isSelected ? 'bg-[#f6be4f] text-[#362569] font-bold shadow-md scale-105 ring-2 ring-[#f6be4f]/40' : 'bg-[#dcd4fe] text-[#47387e] hover:bg-[#d0c6fd]'
+                      }">
+                        ${day}
+                      </div>
+                      ${hasDream && !isSelected ? '<span class="absolute bottom-1 w-1 h-1 rounded-full bg-[#f6be4f]"></span>' : ''}
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+
+              <!-- Card Sogno Registrato -->
+              <div class="mb-3">
+                <p class="text-sm text-[#47387e] font-normal mb-1.5 px-0.5">
+                  Sogno che hai registrato il ${selectedDayNumber} gennaio
+                </p>
+
+                ${activeDream ? `
+                  <button type="button" onclick="App.openDream('${activeDream.id}')" class="w-full bg-[#f6be4f] text-[#362569] font-medium rounded-2xl py-2.5 px-4 flex items-center justify-between shadow-xs hover:brightness-105 active:scale-[0.99] transition-all group">
+                    <span class="text-base tracking-tight truncate mr-2">${activeDream.title}</span>
+                    <span class="text-lg font-bold group-hover:translate-x-1 transition-transform">&gt;</span>
+                  </button>
+                ` : `
+                  <button type="button" onclick="App.openDream('dream-${this.state.selectedDate}')" class="w-full bg-[#dcd4fe] text-[#47387e] font-medium rounded-2xl py-2.5 px-4 flex items-center justify-between shadow-xs hover:bg-[#d0c6fd] active:scale-[0.99] transition-all group">
+                    <span class="text-xs tracking-tight">Nessun sogno salvato. Tocca per scrivere +</span>
+                    <span class="text-base font-bold">+</span>
+                  </button>
+                `}
+              </div>
+
+              <!-- Mascotte Stella al centro -->
+              <div class="flex items-center justify-center mt-1 mb-1">
+                ${SVGS.starMascot(96, true)}
+              </div>
+            </div>
+          `;
+        },
+
+        // Schermata Podcast
+        templatePodcast() {
+          const episodes = [
+            { id: 1, title: 'Viaggio tra le Onde Theta', author: 'Rilassamento notturno', duration: '24 min', tag: 'Frequenze' },
+            { id: 2, title: 'Come ricordare i sogni', author: 'Dott.ssa Laura Merini', duration: '18 min', tag: 'Tecniche' },
+            { id: 3, title: 'Il linguaggio dell’Acqua', author: 'Archetipi Onirici', duration: '31 min', tag: 'Simbologia' },
+            { id: 4, title: 'Pioggia tra le Stelle', author: 'Suoni del Sonno', duration: '45 min', tag: 'Natura' }
+          ];
+
+          return `
+            <div class="w-full flex-1 flex flex-col px-4 pt-3 pb-16 overflow-y-auto no-scrollbar">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h1 class="text-2xl font-medium tracking-tight text-[#47387e]">Podcast</h1>
+                  <p class="text-xs text-[#6e5ba8]">Storie e frequenze per accompagnare il tuo riposo</p>
+                </div>
+                <div class="w-11 h-11 rounded-full overflow-hidden border-2 border-white/60 shadow-xs">
+                  <img src="${this.state.user.avatarUrl}" alt="${this.state.user.name}" class="w-full h-full object-cover" />
+                </div>
+              </div>
+
+              <!-- Banner In Primo Piano -->
+              <div class="bg-[#47387e] text-white rounded-[24px] p-4 mb-4 shadow-sm relative overflow-hidden">
+                <span class="text-[10px] bg-[#f6be4f] text-[#362569] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider inline-block mb-2">In Primo Piano</span>
+                <h2 class="text-lg font-bold mb-1">Volando verso il sonno profondo</h2>
+                <p class="text-xs text-white/70 mb-3">Meditazione guidata con campane tibetane e suoni celesti</p>
+                <button type="button" onclick="App.showToast('Riproduzione in corso...')" class="px-3.5 py-1.5 bg-[#f6be4f] text-[#362569] text-xs font-bold rounded-full shadow-xs active:scale-95 transition-transform">
+                  ▶ Ascolta ora
+                </button>
+              </div>
+
+              <!-- Lista Episodi -->
+              <div class="space-y-2.5">
+                <h3 class="text-sm font-semibold text-[#47387e] px-1">Episodi consigliati</h3>
+                ${episodes.map(ep => `
+                  <div onclick="App.showToast('Avvio: ${ep.title}')" class="bg-white/80 border border-[#b8abec]/70 rounded-2xl p-3 flex items-center justify-between transition-all cursor-pointer hover:bg-white active:scale-[0.99]">
+                    <div class="flex items-center gap-2.5">
+                      <div class="w-9 h-9 rounded-xl bg-[#dcd4fe] text-[#47387e] flex items-center justify-center font-bold text-xs">▶</div>
+                      <div>
+                        <h4 class="text-xs font-semibold text-[#47387e]">${ep.title}</h4>
+                        <p class="text-[10px] text-[#6e5ba8]">${ep.author} • ${ep.duration}</p>
+                      </div>
+                    </div>
+                    <span class="text-[9px] bg-[#ece7ff] text-[#47387e] font-medium px-2 py-0.5 rounded-full">${ep.tag}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        },
+
+        // Schermata Profilo
+        templateProfilo() {
+          const favoriteCount = this.state.dreams.filter(d => d.isFavorite).length;
+
+          return `
+            <div class="w-full flex-1 flex flex-col px-4 pt-3 pb-16 overflow-y-auto no-scrollbar">
+              <div class="flex flex-col items-center text-center mb-4">
+                <div class="w-20 h-20 rounded-full overflow-hidden border-3 border-[#dcd4fe] shadow-md mb-2">
+                  <img src="${this.state.user.avatarUrl}" alt="${this.state.user.name}" class="w-full h-full object-cover" />
+                </div>
+                <h1 class="text-xl font-bold text-[#47387e]">${this.state.user.name}</h1>
+                <p class="text-xs text-[#6e5ba8] mt-0.5 max-w-xs">&ldquo;${this.state.user.favoriteQuote}&rdquo;</p>
+              </div>
+
+              <div class="grid grid-cols-3 gap-2 mb-4">
+                <div class="bg-white/80 border border-[#b8abec] rounded-2xl p-2.5 text-center shadow-xs">
+                  <span class="text-lg font-bold text-[#47387e] block">${this.state.dreams.length}</span>
+                  <span class="text-[9px] font-medium text-[#6e5ba8]">Sogni registrati</span>
+                </div>
+                <div class="bg-white/80 border border-[#b8abec] rounded-2xl p-2.5 text-center shadow-xs">
+                  <span class="text-lg font-bold text-[#f6be4f] block">${this.state.user.streakDays}</span>
+                  <span class="text-[9px] font-medium text-[#6e5ba8]">Giorni streak</span>
+                </div>
+                <div class="bg-white/80 border border-[#b8abec] rounded-2xl p-2.5 text-center shadow-xs">
+                  <span class="text-lg font-bold text-[#47387e] block">${this.state.user.lucidDreams}</span>
+                  <span class="text-[9px] font-medium text-[#6e5ba8]">Sogni lucidi</span>
+                </div>
+              </div>
+
+              <div class="bg-white/70 border border-[#b8abec]/70 rounded-[22px] p-3.5 shadow-xs space-y-2.5">
+                <h2 class="text-xs font-semibold uppercase tracking-wider text-[#6e5ba8]">Preferenze Diario</h2>
+                <div class="flex items-center justify-between py-1 border-b border-[#47387e]/10">
+                  <span class="text-xs font-medium text-[#47387e]">Sogni Preferiti</span>
+                  <span class="text-[10px] font-bold bg-[#f6be4f] text-[#362569] px-2 py-0.5 rounded-full">★ ${favoriteCount}</span>
+                </div>
+                <div class="flex items-center justify-between py-1 border-b border-[#47387e]/10">
+                  <span class="text-xs font-medium text-[#47387e]">Promemoria Risveglio</span>
+                  <span class="text-[10px] text-[#47387e] font-semibold bg-[#dcd4fe] px-2 py-0.5 rounded-full">07:30</span>
+                </div>
+                <div class="flex items-center justify-between py-1 border-b border-[#47387e]/10">
+                  <span class="text-xs font-medium text-[#47387e]">Audio Diario Automatico</span>
+                  <span class="text-[10px] text-[#47387e] font-semibold bg-[#dcd4fe] px-2 py-0.5 rounded-full">Abilitato</span>
+                </div>
+
+                <button type="button" onclick="App.navigate('caricamento')" class="w-full text-center py-2 text-xs font-semibold text-[#47387e] bg-[#dcd4fe]/60 hover:bg-[#dcd4fe] rounded-xl transition-colors active:scale-95 mt-1">
+                  ✦ Rivedi Schermata Caricamento
+                </button>
+              </div>
+            </div>
+          `;
+        },
+
+        // Render Schermata 4: Modale Scheda Sogno
+        renderModal() {
+          const modal = document.getElementById('dream-modal-container');
+          const navContainer = document.getElementById('bottom-nav-container');
+          if (!modal) return;
+
+          if (!this.state.isDreamModalOpen) {
+            modal.classList.add('hidden');
+            navContainer.classList.remove('hidden');
+            return;
+          }
+
+          // Nascondi barra di navigazione inferiore durante la modale
+          modal.classList.remove('hidden');
+          navContainer.classList.add('hidden');
+
+          const dream = this.getCurrentDream();
+          const categories = dream.categoryIds || ['cat-peperoncini', 'cat-spirale'];
+
+          modal.innerHTML = `
+            <div id="dream-modal-box" class="w-full max-w-[346px] bg-[#dcd4fe] rounded-[28px] p-4 shadow-2xl border border-[#cebffe] flex flex-col gap-3 relative my-auto animate-in zoom-in-95 duration-200">
+              <!-- Header della Card: Titolo & Chiusura ✕ -->
+              <div class="flex items-center justify-between">
+                <input id="dream-title-input" type="text" value="${dream.title}" class="text-lg font-medium text-[#47387e] bg-white/70 px-2 py-0.5 rounded-lg border border-[#47387e]/20 outline-none w-full mr-2" placeholder="Titolo del sogno..." />
+                
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button type="button" onclick="App.toggleFavorite('${dream.id}')" title="Preferito" class="text-lg active:scale-90 transition-transform ${dream.isFavorite ? 'text-[#f6be4f]' : 'text-[#47387e]/40'}">
+                    ★
+                  </button>
+                  <button type="button" onclick="App.closeDreamModal()" aria-label="Chiudi" class="text-[#47387e] hover:text-[#362569] p-1.5 rounded-full hover:bg-white/40 active:scale-90 transition-all">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Illustrazione Cielo Notturno -->
+              <div class="w-full bg-[#e8e2fd] border border-[#beb1ea] rounded-[22px] p-1.5 flex items-center justify-center overflow-hidden">
+                ${SVGS.nightSky(false)}
+              </div>
+
+              <!-- Funzione 1: Registra il tuo sogno (Microfono) -->
+              <div class="bg-[#edeae5]/75 rounded-2xl p-2.5 border border-white/60">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <span class="text-sm text-[#47387e] font-normal block">Registra il tuo sogno</span>
+                    <span class="text-[10px] text-[#6e5ba8]">
+                      ${this.state.isRecording ? 'Registrazione in corso...' : this.state.isPlayingAudio ? 'Riproduzione vocale...' : 'Trascrizione audio e memo vocale'}
+                    </span>
+                  </div>
+
+                  <div class="flex items-center gap-1.5">
+                    ${!this.state.isRecording ? `
+                      <button type="button" onclick="App.toggleAudioPlay()" title="Ascolta" class="w-7 h-7 rounded-full bg-[#f6be4f] text-[#47387e] flex items-center justify-center font-bold text-xs shadow-xs active:scale-90">
+                        ${this.state.isPlayingAudio ? '❚❚' : '▶'}
+                      </button>
+                    ` : ''}
+
+                    <button type="button" onclick="App.toggleRecording()" class="w-8 h-8 rounded-full flex items-center justify-center text-white shadow-xs active:scale-90 transition-all ${this.state.isRecording ? 'bg-rose-500 animate-pulse' : 'bg-[#47387e] hover:bg-[#362569]'}">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                        <line x1="12" y1="19" x2="12" y2="23" />
+                        <line x1="8" y1="23" x2="16" y2="23" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                ${(this.state.isRecording || this.state.isPlayingAudio) ? `
+                  <div class="mt-2 pt-1.5 border-t border-[#47387e]/10 flex items-center gap-2">
+                    <div class="flex-1 bg-white/70 h-1.5 rounded-full overflow-hidden">
+                      <div id="audio-progress-bar" class="bg-[#47387e] h-full transition-all duration-150" style="width: ${this.state.audioProgress}%"></div>
+                    </div>
+                    <span id="audio-timer-text" class="text-[9px] text-[#47387e] font-semibold">00:${String(this.state.recordingSeconds).padStart(2, '0')}</span>
+                  </div>
+                ` : ''}
+              </div>
+
+              <!-- Funzione 2: Categorizza il tuo sogno -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5 px-0.5">
+                  <span class="text-sm text-[#47387e] font-normal">Categorizza il tuo sogno</span>
+                  <button type="button" onclick="App.toggleCategory('cat-lucciole')" class="text-[#47387e] text-lg font-bold hover:text-[#362569] active:scale-90 leading-none">+</button>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2">
+                  <!-- Peperoncini -->
+                  <button type="button" onclick="App.toggleCategory('cat-peperoncini')" class="aspect-square rounded-2xl flex flex-col items-center justify-center p-1.5 transition-all relative ${categories.includes('cat-peperoncini') ? 'border-2 border-[#47387e] bg-white/60 shadow-xs' : 'border border-[#b8abec] bg-[#ece7ff]/40 hover:bg-white/30'}">
+                    ${SVGS.peperoncini}
+                    <span class="text-[9px] font-medium text-[#47387e] mt-0.5">Intenso</span>
+                    ${categories.includes('cat-peperoncini') ? '<span class="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#f6be4f]"></span>' : ''}
+                  </button>
+
+                  <!-- Spirale -->
+                  <button type="button" onclick="App.toggleCategory('cat-spirale')" class="aspect-square rounded-2xl flex flex-col items-center justify-center p-1.5 transition-all relative ${categories.includes('cat-spirale') ? 'border-2 border-[#47387e] bg-white/60 shadow-xs' : 'border border-[#b8abec] bg-[#ece7ff]/40 hover:bg-white/30'}">
+                    ${SVGS.spirale}
+                    <span class="text-[9px] font-medium text-[#47387e] mt-0.5">Lucido</span>
+                    ${categories.includes('cat-spirale') ? '<span class="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#f6be4f]"></span>' : ''}
+                  </button>
+
+                  <!-- Lucciole -->
+                  <button type="button" onclick="App.toggleCategory('cat-lucciole')" class="aspect-square rounded-2xl flex flex-col items-center justify-center p-1.5 transition-all relative ${categories.includes('cat-lucciole') ? 'border-2 border-[#47387e] bg-white/60 shadow-xs' : 'border border-[#b8abec] bg-[#ece7ff]/40 hover:bg-white/30'}">
+                    ${SVGS.lucciole}
+                    <span class="text-[9px] font-medium text-[#47387e] mt-0.5">Etereo</span>
+                    ${categories.includes('cat-lucciole') ? '<span class="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#f6be4f]"></span>' : ''}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Funzione 3: Posta (Input e Invio) -->
+              <div class="pt-0.5">
+                <div class="flex items-center justify-between gap-2 bg-white/40 border border-[#b8abec]/80 rounded-2xl px-3 py-1.5 focus-within:bg-white/70 transition-colors">
+                  <input id="dream-note-input" type="text" value="${dream.description || ''}" placeholder="Posta o aggiungi una riflessione..." onkeydown="if(event.key==='Enter') App.saveDream()" class="flex-1 bg-transparent text-[#47387e] text-xs placeholder-[#6e5ba8]/60 outline-none" />
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs text-[#47387e] font-medium select-none">Posta</span>
+                    <button type="button" onclick="App.saveDream()" aria-label="Pubblica" class="w-8 h-8 rounded-full bg-[#47387e] hover:bg-[#362569] text-white flex items-center justify-center shadow-xs active:scale-90 transition-transform">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5">
+                        <line x1="12" y1="19" x2="12" y2="5" />
+                        <polyline points="5 12 12 5 19 12" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        },
+
+        // Render Modale Ricerca
+        renderSearchModal(query = '') {
+          const modal = document.getElementById('search-modal-container');
+          if (!modal) return;
+
+          const q = (query || '').toLowerCase().trim();
+          const filtered = this.state.dreams.filter(d => 
+            d.title.toLowerCase().includes(q) || 
+            (d.description && d.description.toLowerCase().includes(q))
+          );
+
+          modal.innerHTML = `
+            <div id="search-modal-box" class="w-full max-w-[346px] bg-[#edebe5] rounded-[28px] p-4.5 shadow-2xl border border-white/60 flex flex-col max-h-[80vh]">
+              <div class="flex items-center justify-between mb-3">
+                <h2 class="text-lg font-medium text-[#47387e]">Cerca nei tuoi sogni</h2>
+                <button type="button" onclick="App.closeSearch()" class="w-7 h-7 rounded-full bg-[#dcd4fe] text-[#47387e] flex items-center justify-center text-xs hover:bg-[#cfc3fd]">✕</button>
+              </div>
+
+              <div class="relative mb-3">
+                <input id="search-text-input" type="text" value="${query}" oninput="App.renderSearchModal(this.value)" placeholder="Cerca titolo o parola..." autofocus class="w-full bg-white/80 border border-[#b8abec] rounded-2xl py-2 pl-8 pr-3 text-xs text-[#47387e] placeholder-[#6e5ba8]/60 outline-none focus:ring-2 focus:ring-[#f6be4f]" />
+                <span class="absolute left-2.5 top-2.5 text-xs text-[#6e5ba8]">🔍</span>
+              </div>
+
+              <div class="flex-1 overflow-y-auto no-scrollbar space-y-2 pr-0.5">
+                ${filtered.length > 0 ? filtered.map(item => `
+                  <div onclick="App.closeSearch(); App.openDream('${item.id}');" class="w-full text-left bg-white/70 hover:bg-white p-2.5 rounded-2xl border border-[#b8abec]/60 transition-all flex items-center justify-between cursor-pointer active:scale-[0.99]">
+                    <div>
+                      <h4 class="text-xs font-semibold text-[#47387e]">${item.title}</h4>
+                      <p class="text-[10px] text-[#6e5ba8] line-clamp-1 mt-0.5">${item.description || ''}</p>
+                      <span class="text-[9px] bg-[#dcd4fe] text-[#47387e] px-2 py-0.5 rounded-full font-medium inline-block mt-1">${item.dayNumber || 9} Gennaio</span>
+                    </div>
+                    <span class="text-xs text-[#47387e]">&gt;</span>
+                  </div>
+                `).join('') : `
+                  <div class="text-center py-6 text-xs text-[#6e5ba8]">Nessun sogno trovato</div>
+                `}
+              </div>
+            </div>
+          `;
+
+          // Rimette il focus sull'input dopo il render
+          const input = document.getElementById('search-text-input');
+          if (input && query) {
+            input.focus();
+            input.setSelectionRange(query.length, query.length);
+          }
+        }
+      };
+
+      // Avvio al caricamento del DOM
+      document.addEventListener('DOMContentLoaded', () => {
+        App.init();
+      });
+    </script>
   </body>
 </html>
-
